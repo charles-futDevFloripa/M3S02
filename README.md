@@ -1,6 +1,6 @@
-# Projeto M3S02 - Questionários Simplificados
+# Exercícios M3S02 - Questionários Simplificados
 
-Este repositório contém o projeto **Questionários Simplificados** que faz parte da M3S02. O projeto envolve a criação de uma API com Node.js, Express, Sequelize, e JWT para autenticação. A API foi documentada utilizando Swagger.
+Este repositório contém os exercícios de referência ao projeto **Questionários Simplificados** . Os exercícios envolvem a criação de uma API com Node.js, Express, Sequelize, e JWT para autenticação. A API foi documentada utilizando Swagger.
 
 ## Instruções para execução
 
