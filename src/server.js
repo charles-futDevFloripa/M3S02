@@ -4,18 +4,19 @@ require('dotenv').config();
 // Importações principais
 const express = require('express');
 const database = require('./database/config');
+const { swaggerUi, swaggerSpec } = require('./config/swagger');
 
-// Importação das rotas
 const usuarioRouter = require('./dominios/usuarios');
 const questionariosRouter = require('./dominios/questionarios');
 const sessionsRouter = require('./dominios/sessions');
 const respostasRouter = require('./dominios/respostas');
 
-// Inicializa o app do Express
 const app = express();
 
-// Middleware para tratar requisições JSON
 app.use(express.json());
+
+/** Swagger Documentation */
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /** DEFINIÇÃO DE ROTAS */
 
