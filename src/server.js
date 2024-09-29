@@ -1,6 +1,8 @@
 const http = require('http');
+require('dotenv').config();
 
-// Função que será chamada para tratar requisições
+const PORT = process.env.PORT_API || 3000;
+
 const server = http.createServer((req, res) => {
   // Verifica se a rota é /fundamentos e o método é GET
   if (req.url === '/fundamentos' && req.method === 'GET') {
@@ -11,9 +13,6 @@ const server = http.createServer((req, res) => {
     res.end('Not Found');
   }
 });
-
-// Define a porta que o servidor vai escutar
-const PORT = 3000;
 
 server.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
