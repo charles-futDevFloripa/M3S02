@@ -1,22 +1,63 @@
-const express = require('express');
-const app = express();
+// Carrega as variáveis de ambiente
 require('dotenv').config();
 
-// Middlewares
+// Importações principais
+const express = require('express');
+const database = require('./database/config');
+
+// Importação das rotas
+const usuarioRouter = require('./dominios/usuarios');
+const questionariosRouter = require('./dominios/questionarios');
+const sessionsRouter = require('./dominios/sessions');
+const respostasRouter = require('./dominios/respostas');
+
+// Inicializa o app do Express
+const app = express();
+
+// Middleware para tratar requisições JSON
 app.use(express.json());
 
-// Rotas
-const usuarioRoutes = require('./routes/usuarioRoutes');
-app.use('/api', usuarioRoutes);
+/** DEFINIÇÃO DE ROTAS */
 
-//Exercicio 01
-app.get('/fundamentos', (req, res) => {
-  res.send('Hello world, fundamentos nodejs aplicado.');
+// Rotas de Sessão (Login)
+app.use('/sessions', sessionsRouter);
+
+// Rotas de Usuários (Cadastro e gerenciamento de usuários)
+app.use('/usuarios', usuarioRouter);
+
+// Rotas de Questionários (Protegidas por autenticação)
+app.use('/questionarios', questionariosRouter);
+
+// Rotas de Respostas (Protegidas por autenticação)
+app.use('/respostas', respostasRouter);
+
+// Middleware para rotas inexistentes (404)
+app.use((req, res, next) => {
+  res.status(404).json({ message: 'Rota não encontrada' });
 });
 
-// Porta
-const PORT = process.env.PORT_API || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+// Tratamento de erros gerais
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Ocorreu um erro no servidor' });
 });
+
+/** INICIALIZAÇÃO DO SERVIDOR */
+async function iniciarServidor() {
+  try {
+    // Conexão com o banco de dados
+    await database.authenticate();
+    console.log('Banco de dados inicializado com sucesso!');
+
+    // Iniciar o servidor na porta definida no .env ou 3333
+    const PORT = process.env.PORT_API || 3333;
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erro ao inicializar o servidor:', error);
+  }
+}
+
+// Iniciar o servidor
+iniciarServidor();
